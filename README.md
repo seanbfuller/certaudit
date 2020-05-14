@@ -15,24 +15,29 @@ brew update
 brew install python
 brew install pyenv
 brew install pipenv
-pyenv install 3.7.7
-pyenv global 3.7.7
+pyenv install 3.8.2
+pyenv global 3.8.2
 echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init -)"\nfi' >> ~/.bash_profile
 source ~/.bash_profile
 
-## Build dependencies (not needed)
-pipenv install dnspython
-pipenv install dateutil
-pipenv install progressbar
+## Start the environment
+
+pipenv shell
+
+## Build dependencies
+
+pipenv install
 
 ## File cleanup
 
 Any entries in the form of "CNAME 1 <VALUE>" cannot be parsed by dnspython and must be removed from the file first.
 
-## Start the environment
-pipenv shell
-
 ## Run the script against a file for domain ul.com
+
 Example:
 pipenv run python main.py -i input/my.zonefile.txt -d mydomain.com
+
+## Results
+
+You should get a csv file in the output folder. A progress bar and any error will be output to the screen.
 
