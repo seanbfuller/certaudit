@@ -121,22 +121,31 @@ bar = progressbar.ProgressBar(maxval=number_of_urls, \
 current_progress = 0
 bar.start()
 
-# Loop through each
-if not os.path.exists('output'):
-    os.makedirs('output')
-f = csv.writer(open('output/domains.csv', 'w'))
+# Request data and build the results
+cert_urls = defaultdict(dict)
 for url in domain_urls:
   current_progress = current_progress+1
   bar.update(current_progress)
-  url_type = domain_urls[url]['type']
   ssl_info = get_cert_info(url)
-  common_name = ssl_info['common_name']
-  issued_name = ssl_info['issued_name']
-  serial_number = ssl_info['serial_number']
-  expiration_date = ssl_info['expiration_date']
+  ssl_info['type'] = domain_urls[url]['type']
+  cert_urls[url] = ssl_info
+
+bar.finish()
+print('Requests finished.')
+print('Writing results to file...')
+
+# Output to file
+if not os.path.exists('output'):
+  os.makedirs('output')
+f = csv.writer(open('output/domains.csv', 'w'))
+for url in cert_urls:
+  url_type = cert_urls[url]['type']
+  common_name = cert_urls[url]['common_name']
+  issued_name = cert_urls[url]['issued_name']
+  serial_number = cert_urls[url]['serial_number']
+  expiration_date = cert_urls[url]['expiration_date']
   status = ssl_info['status']
   f.writerow([url, url_type, common_name, issued_name, expiration_date, serial_number, status])
-bar.finish()
 
 # Give feedback that we are done!
 print('Script finished.')
