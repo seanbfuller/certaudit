@@ -1,4 +1,7 @@
 
+# Description
+
+Python script to parse a DNS zonefile and output information about certificates for each domain to a csv file.
 
 # Environment setup
 
@@ -23,6 +26,8 @@ References:
 * pyenv global 3.8.2
 * echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init -)"\nfi' >> ~/.bash_profile
 * source ~/.bash_profile
+
+# Run the script
 
 ## Start the environment
 

@@ -31,8 +31,8 @@ def get_cert_info(hostname):
   wildcards = ('@.','*.')
   if hostname.startswith(wildcards):
     hostname = hostname[2:]
-  # Turn off errors for invalid hostnames
-  ctx.check_hostname = False
+  # Get and parse the cert
+  ctx = ssl.create_default_context()
   with ctx.wrap_socket(socket.socket(), server_hostname=hostname) as s:
     try:
       s.settimeout(3)
@@ -40,15 +40,16 @@ def get_cert_info(hostname):
       cert = s.getpeercert()
       # step into the subject so we can get the common_name
       subject = dict(x[0] for x in cert['subject'])
-      ssl_info['common_name'] = subject['commonName']
+      ssl_info['common_name'] = subject['commonName'] if 'commonName' in subject else ''
       # step into the issuer to get the oganirationName
       issuer = dict(x[0] for x in cert['issuer'])
-      ssl_info['issued_name'] = issuer['organizationName']
+      ssl_info['issued_name'] = issuer['organizationName'] if 'organizationName' in issuer else ''
       # Get the serial number so we can compare
-      ssl_info['serial_number'] = cert['serialNumber']
+      ssl_info['serial_number'] = cert['serialNumber'] if 'serialNumber' in cert else ''
       # Get the expiration
-      exp_date_object = dateparser.parse(cert['notAfter'])
+      exp_date_object = dateparser.parse(cert['notAfter']) if 'notAfter' in cert else ''
       ssl_info['expiration_date'] = exp_date_object.strftime('%Y-%m-%d')
+      # set the status (we mostly just use this for errors)
       ssl_info['status'] = 200
     except socket.error as err:
       error_string = repr(err)
