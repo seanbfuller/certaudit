@@ -42,9 +42,9 @@ pipenv install
 * Place your zone file in the input folder.
 * Any entries in the form of "CNAME 1 <VALUE>" cannot be parsed by dnspython and must be removed from the file first.
 
-## Run the script against a file for domain ul.com
+## Run the script against a file for domain example.com
 
-* pipenv run python main.py -i input/my.zonefile.txt -d mydomain.com
+* pipenv run python main.py -i input/example.com.zonefile.txt -d example.com
 
 ## Results
 
