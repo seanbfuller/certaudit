@@ -144,7 +144,7 @@ for url in cert_urls:
   issued_name = cert_urls[url]['issued_name']
   serial_number = cert_urls[url]['serial_number']
   expiration_date = cert_urls[url]['expiration_date']
-  status = ssl_info['status']
+  status = cert_urls[url]['status']
   f.writerow([url, url_type, common_name, issued_name, expiration_date, serial_number, status])
 
 # Give feedback that we are done!
